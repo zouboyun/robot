@@ -1,0 +1,57 @@
+<canvas id="myCanvas" width="200" height="100" style="border: 1px solid black"></canvas>
+
+<script type="text/javascript">
+  var canvas = document.getElementById("myCanvas");
+  // var name = 'alice';
+  // console.log('hello world');
+  // console.log(c);
+
+  function drawLine(x1, y1, x2, y2) {
+    var context = canvas.getContext("2d");
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
+    context.stroke();
+  }
+
+  // drawLine(90, 10, 110, 10);
+  // drawLine(90, 10, 90, 20);
+  // drawLine(110, 10, 110, 20);
+  // drawLine(110, 20, 90, 20);
+
+  function drawBox(x1, x2, y1, y2) {
+    drawLine(x1, y1, x1, y2);
+    drawLine(x2, y1, x2, y2);
+    drawLine(x1, y2, x2, y2);
+    drawLine(x1, y1, x2, y1);
+  }
+
+
+  drawBox(90, 110, 10, 20); // head
+  drawBox(80, 120, 30, 50); // body
+  drawLine(100, 20, 100, 30); // neck
+  drawLine(70, 40, 80, 40); // left arm
+  drawLine(120, 40, 130, 40); // right arm
+  drawLine(70, 40, 70, 50); // left arm
+  drawLine(130, 40, 130, 50); // right arm
+  drawLine(90, 50, 90, 80); // left leg
+  drawLine(110, 50, 110, 80); // right leg
+  drawLine(85, 80, 90, 80); // left foot
+  drawLine(105, 80, 110, 80); // right foot
+
+  // var context = canvas.getContext("2d");
+  // context.moveTo(90, 10);
+  // context.lineTo(90, 20);
+  // context.stroke();
+
+  // var context = canvas.getContext("2d");
+  // context.moveTo(110, 10);
+  // context.lineTo(110, 20);
+  // context.stroke();
+
+  // var context = canvas.getContext("2d");
+  // context.moveTo(110, 20);
+  // context.lineTo(90, 20);
+  // context.stroke();
+
+
+</script>
