@@ -1,138 +1,134 @@
-<!-- create a canvas and draw a robot -->
-<canvas id = "MyCanvas" width = "300" height = "300" style="border:1px solid #000000;"></canvas>
+<!-- create a canvas and draw robots -->
+<canvas id = "MyCanvas" width = "600" height = "300" style="border:1px solid #000000;"></canvas>
 <script>
+
 var canvas = document.getElementById("MyCanvas");
 var context = canvas.getContext("2d");
 
-function fillBox(x1, x2, y1, y2) {
-  var oldFillStyle = context.fillStyle;
-  context.beginPath();
-  context.rect(x1, y1, x2 - x1, y2 - y1);
-  context.fillStyle = "white";
-  context.fill();
-  context.fillStyle = oldFillStyle;
+// Declare variables for robots
+var bobby_x = 150; // x-axis of the center point of bobby
+var bobby_y = 150; // y-axis of the center point of bobby
+var clark_x = 450; // x-axis of the center point of clark
+var clark_y = 150; // y-axis of the center point of clark
+var body_half_width = 70;
+var body_half_height = 40;
+var head_half_width = 50;
+var head_half_height = 25;
+var neck_length = 10;
+var arm_length = 30;
+var shoulder_length = 15;
+var leg_length = 40;
+var foot_length = 10;
+var eye_width = 5;
+var mouth_width = 60;
+
+// Define functions
+
+<!-- erase existing drawing -->
+function erase_bobby(){
+	context.beginPath();
+	context.fillStyle = "White";
+	context.fillRect(0, 0, 300, 300);
 }
 
+function erase_clark(){
+	context.beginPath();
+	context.fillStyle = "White";
+	context.fillRect(300, 0, 300, 300);
+}
+
+<!-- draw a line -->
 function drawLine(x1, y1, x2, y2){
-  context.beginPath();
-  context.moveTo(x1,y1);
-  context.lineTo(x2,y2);
-  context.stroke();
+	context.moveTo(x1,y1);
+	context.lineTo(x2,y2);
+	context.stroke();
 }
 
+<!-- draw a box -->
 function drawBox(x1, x2, y1, y2){
-  drawLine(x1, y1, x1, y2);
-  drawLine(x1, y2, x2, y2);
-  drawLine(x1, y1, x2, y1);
-  drawLine(x2, y1, x2, y2);
+	drawLine(x1, y1, x1, y2);
+	drawLine(x1, y2, x2, y2);
+	drawLine(x1, y1, x2, y1);
+	drawLine(x2, y1, x2, y2);
 }
 
+<!-- draw an arm -->
 function drawArm(x1, y1, x2, y2){
-  drawLine(x1, y1, x2, y1);
-  drawLine(x2, y1, x2, y2);
+	drawLine(x1, y1, x2, y1);
+	drawLine(x2, y1, x2, y2);
 }
 
-function drawArmWithLength(x1, y1, shoulder_length, forearm_length){
-  drawLine(x1, y1, x1 + shoulder_length, y1);
-  drawLine(x1 + shoulder_length, y1, x1 + shoulder_length, y1 + forearm_length);
-}
-
+<!-- draw a leg -->
 function drawLeg(x1, y1, x2, y2){
-  drawLine(x1, y1, x1, y2);
-  drawLine(x1, y2, x2, y2);
+	drawLine(x1, y1, x1, y2);
+	drawLine(x1, y2, x2, y2);
 }
 
+<!-- draw eyes -->
 function drawEye(x1, y1, r1, x2, y2, r2){
-  context.beginPath();
-  context.arc(x1, y1, r1, 0, 2*Math.PI);
-  context.stroke();
-  context.beginPath();
-  context.arc(x2, y2, r2, 0, 2*Math.PI);
-  context.stroke();
+	context.beginPath();
+	context.arc(x1, y1, r1, 0, 2*Math.PI);
+	context.stroke();
+	context.beginPath();
+	context.arc(x2, y2, r2, 0, 2*Math.PI);
+	context.stroke();
 }
 
+<!-- draw a mouth -->
 function drawMouth(x1, y1, x2, y2, x3, y3){
-  context.beginPath();
-  context.bezierCurveTo(x1, y1, x2, y2, x3, y3);
-  context.stroke();
+	context.beginPath();
+	context.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+	context.stroke();
 }
 
-function drawHead() {
-  drawBox(100, 200, 50, 100); // head
-  drawEye(125, 65, 5, 175, 65, 5); // eyes
-  drawMouth(120, 85, 150, 95, 180, 85); //mouth
+<!-- draw name -->
+function drawName(Name, location){
+	context.font = '32px Arial';
+	context.textBaseline = 'bottom';
+	context.fillText(Name, location, 300);
 }
 
-function drawBody(armsDirection) {
-  drawBox(80, 220, 120, 200); // body
-  drawLine(150, 100, 150, 120); // neck
-  if (armsDirection == 'down') {
-    drawArmWithLength(80, 150, -20, 30); // left arm
-    drawArmWithLength(220, 150, 20, 30); // right arm
-  } else if (armsDirection == 'up') {
-    drawArmWithLength(80, 150, -20, -30); // left arm
-    drawArmWithLength(220, 150, 20, -30); // right arm
-  }
-  // drawArm(80, 150, 60, 180); // left arm
-  // drawArm(220, 150, 240, 180); // right arm
-  drawLeg(115, 200, 100, 220); // left leg
-  drawLeg(185, 200, 170, 220); // right leg
+function drawRobot(x, y, Name){
+	// draw body
+	drawBox(x - body_half_width, x + body_half_width, y - body_half_height, y + body_half_height);
+	// draw neck
+	drawLine(x, y - body_half_height, x, y - body_half_height - neck_length);
+	// draw head
+	drawBox(x - head_half_width, x + head_half_width, y - body_half_height - neck_length - 2*head_half_height, y - body_half_height - neck_length);
+	// draw arm
+	drawArm(x - body_half_width, y - 15, x - body_half_width - shoulder_length, y - 15 + arm_length);
+	drawArm(x + body_half_width, y - 15, x + body_half_width + shoulder_length, y - 15 + arm_length);
+	// draw leg
+	drawLeg(x - body_half_width/2, y + body_half_height, x - body_half_width/2 - foot_length, y + body_half_height + leg_length);
+	drawLeg(x + body_half_width/2, y + body_half_height, x + body_half_width/2 - foot_length, y + body_half_height + leg_length);
+	// draw eyes
+	drawEye(x - head_half_width/2, y - body_half_height - neck_length - head_half_height*1.5, eye_width, x + head_half_width/2, y - body_half_height - neck_length - head_half_height*1.5, eye_width);	
+	// draw mouth
+	drawMouth(x - mouth_width/2, y - body_half_height - neck_length - head_half_height/1.5, x, y - body_half_height - neck_length - head_half_height/5, x + mouth_width/2, y - body_half_height - neck_length - head_half_height/1.5);
+	// draw name
+	drawName(Name, x - 50);
 }
+<!-- draw gradient  -->
+<!-- var grd = context.createRadialGradient(75,50,5,90,60,100); -->
+<!-- grd.addColorStop(0,"red"); -->
+<!-- grd.addColorStop(1,"white"); -->
+<!-- context.fillStyle = grd; -->
+<!-- context.fillRect(102, 70, 10, 20); -->
+<!-- drawBox(100, 200, 50, 100); // head -->
+<!-- drawBox(80, 220, 120, 200); // body -->
+<!-- drawLine(150, 100, 150, 120); // neck -->
+<!-- drawArm(80, 150, 60, 180); // left arm -->
+<!-- drawArm(220, 150, 240, 180); // right arm -->
+<!-- drawLeg(115, 200, 100, 220); // left leg -->
+<!-- drawLeg(185, 200, 170, 220); // right leg -->
+<!-- drawEye(125, 65, 5, 175, 65, 5); // eyes -->
+<!-- drawMouth(120, 85, 150, 95, 180, 85); //mouth -->
+// erase();
+<!-- drawRobot(clark_x, clark_y, "Clark"); -->
+<!-- set timer to animate Bobby and Clark -->
+setInterval(erase_bobby, 1000);
+setTimeout(function(){setInterval(drawRobot, 1000, bobby_x, bobby_y, 'Bobby');}, 500);
 
-function drawName() {
-  context.beginPath();
-  context.font = '32px Arial';
-  context.textBaseline = 'bottom';
-  context.fillText('Bobby', 100, 300); // Name
-}
 
-function erase() {
-  fillBox(0, 300, 0, 300);
-}
-
-// setInterval(function(){
-//   drawHead();
-//   drawBody();
-//   drawName();  
-// }, 1000);
-// function delayDraw() {
-//   setInterval(
-//     function(){
-//       drawHead();
-//       drawBody('up');
-//       drawName();  
-//     }, 1000
-//   )
-// }
-
-// setInterval(clearRect, 1000);
-// setTimeout(drawHead, 5000);
-
-function drawRobotWithArmsUp() {
-  erase();
-  drawHead();
-  drawBody('up');
-  drawName();  
-}
-
-function drawRobotWithArmsDown() {
-  erase(); 
-  drawHead();
-  drawBody('down');
-  drawName();
-}
-
-function repeatDrawWithDelay(drawFunction, interval, delay) {
-  setTimeout(
-    function() {
-      setInterval(
-        drawFunction, interval
-      )
-    }, delay
-  );
-}
-
-repeatDrawWithDelay(drawRobotWithArmsUp, 100, 50);
-repeatDrawWithDelay(drawRobotWithArmsDown, 100, 0);
-
+<!-- setInterval(erase_bobby, 1000); -->
 </script>
