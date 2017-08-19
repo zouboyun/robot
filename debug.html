@@ -1,0 +1,29 @@
+<script>
+
+var myVariable = { "number": 10, 'position':{'x':150,'y':150},'body':{'halfWidth':70,'halfHeight':40},'head':{'halfWidth':50,'halfHeight':25},'neckLength':10,'armLength':30,'shoulderLength':15,'legLength':40,'footLength':10,'eyeWidth':5,'mouthWidth':60 };
+
+function bar(myVariable) {
+  foo();
+  console.log(myVariable["number"]);
+}
+
+function foo() {
+  myVariable["number"] = 11;
+}
+
+bar(myVariable); // 10
+console.log(myVariable["number"]); // 11
+
+</script>
+
+memory:
+  0xa0302904:
+    { "number": 11, 'position':{'x':150,'y':150},'body':{'halfWidth':70,'halfHeight':40},'head':{'halfWidth':50,'halfHeight':25},'neckLength':10,'armLength':30,'shoulderLength':15,'legLength':40,'footLength':10,'eyeWidth':5,'mouthWidth':60 }
+  global scope:
+    myVariable = 0xa0302904;
+    bar context:
+      myVariable = 0xa0302904;
+    foo context:
+
+11
+11
