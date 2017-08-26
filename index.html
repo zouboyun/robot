@@ -96,6 +96,25 @@ function drawBox(x1, x2, y1, y2){
   drawLine(x2, y1, x2, y2);
 }
 
+function drawBoxWithBox(box){
+  // var x1 = box.topLeft.x;
+  // var x2 = box.bottomRight.x;
+  // var y1 = box.topLeft.y;
+  // var y2 = box.bottomRight.y;
+  drawLineWithLine(box.leftLine());
+  drawLineWithLine(box.rightLine());
+  drawLineWithLine(box.topLine());
+  drawLineWithLine(box.bottomLine());
+  // drawLine(x1, y1, x1, y2);
+  // drawLine(x1, y2, x2, y2);
+  // drawLine(x1, y1, x2, y1);
+  // drawLine(x2, y1, x2, y2);
+}
+
+function drawLineWithLine(line) {
+  drawLine(line.start.x, line.start.y, line.end.x, line.end.y);
+}
+
 // draw an arm
 function drawArm(x1, y1, x2, y2){
   drawLine(x1, y1, x2, y1);
@@ -132,9 +151,65 @@ function drawName(name, location){
   context.fillText(name, location, 300);
 }
 
-function drawRobot(x, y, name){
+function Line(start, end){
+  this.start = start;
+  this.end = end;
+}
+
+function Coordinate(x, y) {
+  this.x = x;
+  this.y = y;
+}
+
+function Box(topLeft, bottomRight) {
+  this.topLeft = topLeft;
+  this.bottomRight = bottomRight;
+  this.leftLine = function() {
+    var start = new Coordinate(this.topLeft.x, this.topLeft.y);
+    var end = new Coordinate(this.topLeft.x, this.bottomRight.y);
+    var line = new Line(start, end);
+    return line;
+  }
+  this.rightLine = function() {
+    var start = new Coordinate(this.bottomRight.x, this.topLeft.y);
+    var end = new Coordinate(this.bottomRight.x, this.bottomRight.y);
+    var line = new Line(start, end);
+    return line;
+  }
+  this.topLine = function() {
+    var start = new Coordinate(this.topLeft.x, this.topLeft.y);
+    var end = new Coordinate(this.bottomRight.x, this.topLeft.y);
+    var line = new Line(start, end);
+    return line;
+  }
+  this.bottomLine = function() {
+    var start = new Coordinate(this.topLeft.x, this.bottomRight.y);
+    var end = new Coordinate(this.bottomRight.x, this.bottomRight.y);
+    var line = new Line(start, end);
+    return line;
+  }
+}
+
+function Robot(x, y, name) {
+  this.x = x;
+  this.y = y;
+  this.name = name;
+  this.getBody = function() {
+    var leftX = this.x - bodyHalfWidth;
+    var rightX = this.x + bodyHalfWidth;
+    var topY = this.y - bodyHalfHeight;
+    var bottomY = this.y + bodyHalfHeight;
+    var topLeft = new Coordinate(leftX, topY);
+    var bottomRight = new Coordinate(rightX, bottomY);
+    return new Box(topLeft, bottomRight);
+  }
+}
+
+function drawRobot(x, y, name) {
   // draw body
-  drawBox(x - bodyHalfWidth, x + bodyHalfWidth, y - bodyHalfHeight, y + bodyHalfHeight);
+  var bobby = new Robot(x, y, name);
+  drawBoxWithBox(bobby.getBody());
+
   // draw neck
   drawLine(x, y - bodyHalfHeight, x, y - bodyHalfHeight - neckLength);
   // draw head

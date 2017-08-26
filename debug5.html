@@ -1,0 +1,32 @@
+<script>
+
+// var myVariable = 10;
+var globalVariable = 100;
+
+function bar() {
+  function foo() {
+    // myVariable = 11;
+    this.globalVariable = 101;
+    console.log(this.globalVariable);
+  }
+  foo();
+  // console.log(myVariable);
+}
+
+bar(); // 10
+console.log(globalVariable); // 10
+
+</script>
+
+global context:
+  myVariable = 10
+  globalVariable = 'hello';
+  bar context:
+    this.globalVariable
+    myVariable = 10
+    foo context:
+      myVariable = 11
+      globalVariable
+
+10
+10

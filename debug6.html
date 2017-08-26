@@ -1,0 +1,40 @@
+<script>
+
+// var myVariable = 10;
+// var globalVariable = 100;
+var socksContext = {redSocks: 1000, whiteSocks: 0};
+var socksContext2 = {redSocks: 2000, whiteSocks: 0};
+
+var redSocks = 500;
+var whiteSocks = 5;
+var yellowSocks = 555;
+
+function printSocks() {
+  var printer = george;
+  printer(this.redSocks);
+  printer(this.whiteSocks);
+  printer(yellowSocks);
+}
+
+function george(number) {
+  console.log(number);
+}
+
+// printSocks();
+// printSocks.apply();
+// printSocks.apply(this);
+
+printSocks.apply(socksContext);
+// printSocks.apply(socksContext2);
+
+</script>
+
+
+memory:
+  0xa0bb78: {redSocks: 1000, whiteSocks: 0}
+  0xa0bb80: {redSocks: 2000, whiteSocks: 0}
+  global: {socksContext: 0xa0bb78, 0xa0bb80, redSocks: 500, whiteSocks: 5, yellowSocks: 555}
+global scope:
+  printSocks scope:
+    printer
+    context -> 0xa0bb78
